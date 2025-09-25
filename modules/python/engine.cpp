@@ -140,8 +140,7 @@ public:
 			if(result)
 			{
 				Py_DECREF(result);
-				if(Py_FlushLine())
-					PyErr_Clear();
+				PyErr_Clear();
 			}
 			else
 			{

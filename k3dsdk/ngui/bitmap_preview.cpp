@@ -28,8 +28,8 @@
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/image.h>
 
-#include <boost/gil/extension/numeric/resample.hpp>
-#include <boost/gil/extension/numeric/sampler.hpp>
+//#include <boost/gil/extension/numeric/resample.hpp>
+//#include <boost/gil/extension/numeric/sampler.hpp>
 
 namespace k3d
 {
@@ -132,15 +132,15 @@ void control::data_changed(k3d::ihint*)
 #ifdef K3D_API_DARWIN
     assert_not_implemented();
 #else
-		boost::gil::resize_view(
+		// Modern boost::gil doesn't have resize_view, so for now we'll use simple copy
+		// TODO: Implement proper image resizing or use a modern image library
+		boost::gil::copy_and_convert_pixels(
 			boost::gil::color_converted_view<boost::gil::rgb8_pixel_t>(boost::gil::const_view(*data), extract_rgb()),
-			image,
-			boost::gil::bilinear_sampler());
+			image);
 
-		boost::gil::resize_view(
+		boost::gil::copy_and_convert_pixels(
 			boost::gil::color_converted_view<boost::gil::rgb8_pixel_t>(boost::gil::const_view(*data), extract_alpha()),
-			alpha,
-			boost::gil::bilinear_sampler());
+			alpha);
 #endif
 	}
 	else

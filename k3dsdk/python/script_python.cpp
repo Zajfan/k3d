@@ -44,7 +44,7 @@ public:
 			boost::python::object python_key = python_item[0];
 			boost::python::object python_value = python_item[1];
 
-			const string_t key = PyString_AsString(python_key.ptr());
+			const string_t key = PyUnicode_AsUTF8(python_key.ptr());
 			boost::any value = python_to_any(python_value);
 
 			context.insert(std::make_pair(key, value));

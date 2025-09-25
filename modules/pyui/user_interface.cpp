@@ -75,7 +75,14 @@ public:
 		std::vector<char*> argv_buffer;
 		argv_buffer.push_back(const_cast<char*>("k3d"));
 		int argc = argv_buffer.size();
-		char** argv = &argv_buffer[0];
+		
+		// Convert char** to wchar_t** for Python 3
+		std::vector<wchar_t*> wargv_buffer;
+		for(char* arg : argv_buffer)
+		{
+			wargv_buffer.push_back(Py_DecodeLocale(arg, NULL));
+		}
+		wchar_t** wargv = &wargv_buffer[0];
 
 		try
 		{
@@ -83,7 +90,13 @@ public:
 
 			initk3d();
 
-			Py_Main(argc, argv);
+			Py_Main(argc, wargv);
+			
+			// Clean up wide character strings
+			for(wchar_t* warg : wargv_buffer)
+			{
+				PyMem_RawFree(warg);
+			}
 		}
 		catch(std::exception& e)
 		{

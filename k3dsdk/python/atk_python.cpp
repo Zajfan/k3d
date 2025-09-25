@@ -150,9 +150,9 @@ static object get_item_idx(atk_object_wrapper& Self, const k3d::uint_t Key, cons
 template<typename Role>
 static object get_item(atk_object_wrapper& Self, object Key)
 {
-	if(PyString_Check(Key.ptr()))
+	if(PyUnicode_Check(Key.ptr()))
 		return get_item_name(Self, boost::python::extract<string_t>(Key), static_cast<AtkRole>(Role::value));
-	else if(PyInt_Check(Key.ptr()))
+	else if(PyLong_Check(Key.ptr()))
 		return get_item_idx(Self, boost::python::extract<int32_t>(Key), static_cast<AtkRole>(Role::value));
 	else
 		throw std::runtime_error("Item lookup key must be a string or an integer");

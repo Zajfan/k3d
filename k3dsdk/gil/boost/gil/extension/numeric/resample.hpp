@@ -14,6 +14,8 @@
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 #include "affine.hpp"
 
+using boost::lambda::_1;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// \file               
 /// \brief support for generic image resampling

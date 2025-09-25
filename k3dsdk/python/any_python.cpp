@@ -226,13 +226,13 @@ const boost::any python_to_any(const object& Value)
 	if(PyBool_Check(value))
 		return extract<bool_t>(Value)();
 
-	if(PyInt_Check(value))
+	if(PyLong_Check(value))
 		return extract<int32_t>(Value)();
 
 	if(PyFloat_Check(value))
 		return extract<double_t>(Value)();
 
-	if(PyString_Check(value))
+	if(PyUnicode_Check(value))
 		return extract<string_t>(Value)();
 
 	safe_extract(k3d::filesystem::path, Value);
@@ -298,14 +298,14 @@ const boost::any python_to_any(const object& Value, const std::type_info& Target
 
 	if(TargetType == typeid(int))
 	{
-		return_val_if_fail(PyInt_Check(value), boost::any());
-		return boost::any(static_cast<int>(PyInt_AsLong(value)));
+		return_val_if_fail(PyLong_Check(value), boost::any());
+		return boost::any(static_cast<int>(PyLong_AsLong(value)));
 	}
 
 	if(TargetType == typeid(long))
 	{
-		if(PyInt_Check(value))
-			return boost::any(static_cast<long>(PyInt_AsLong(value)));
+		if(PyLong_Check(value))
+			return boost::any(static_cast<long>(PyLong_AsLong(value)));
 
 		if(PyLong_Check(value))
 			return boost::any(static_cast<long>(PyLong_AsLong(value)));
@@ -321,8 +321,8 @@ const boost::any python_to_any(const object& Value, const std::type_info& Target
 		if(PyFloat_Check(value))
 			return boost::any(PyFloat_AsDouble(value));
 
-		if(PyInt_Check(value))
-			return boost::any(static_cast<double>(PyInt_AsLong(value)));
+		if(PyLong_Check(value))
+			return boost::any(static_cast<double>(PyLong_AsLong(value)));
 
 		if(PyLong_Check(value))
 			return boost::any(static_cast<double>(PyLong_AsLong(value)));
@@ -332,8 +332,8 @@ const boost::any python_to_any(const object& Value, const std::type_info& Target
 
 	if(TargetType == typeid(std::string))
 	{
-		return_val_if_fail(PyString_Check(value), boost::any());
-		return boost::any(std::string(PyString_AsString(value)));
+		return_val_if_fail(PyUnicode_Check(value), boost::any());
+		return boost::any(std::string(PyUnicode_AsUTF8(value)));
 	}
 
 	if(TargetType == typeid(filesystem::path))
@@ -420,13 +420,9 @@ const boost::any python_to_any(const object& Value, const std::type_info& Target
 
 const ustring python_to_ustring(const boost::python::object& Value)
 {
-	if(PyString_Check(Value.ptr()))
+	if(PyUnicode_Check(Value.ptr()))
 	{
-		return ustring::from_utf8(PyString_AsString(Value.ptr()));
-	}
-	else if(PyUnicode_Check(Value.ptr()))
-	{
-		return ustring::from_utf8(PyString_AsString(Value.attr("encode")("UTF-8").ptr()));
+		return ustring::from_utf8(PyUnicode_AsUTF8(Value.ptr()));
 	}
 
 	throw std::invalid_argument("Can't convert Python value to a Unicode string.");

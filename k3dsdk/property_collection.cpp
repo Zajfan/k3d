@@ -26,6 +26,8 @@
 #include <k3dsdk/property_collection.h>
 #include <k3dsdk/result.h>
 
+#include <algorithm>
+
 namespace k3d
 {
 
