@@ -1,8 +1,7 @@
-#ifndef APPLICATION_K3D_MAIN_H
-#define APPLICATION_K3D_MAIN_H
+#pragma once
 
 // K-3D
-// Copyright (c) 1995-2008, Timothy M. Shead
+// Copyright (c) 1995-2025, Timothy M. Shead
 //
 // Contact: tshead@k-3d.com
 //
@@ -29,6 +28,3 @@
 
 /// Main entry-point for the application ... callers should pass all command-line arguments *except for* the program name (i.e. argv[0])
 int k3d_main(std::vector<k3d::string_t> arguments);
-
-#endif // !APPLICATION_K3D_MAIN_H
-
